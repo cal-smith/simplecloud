@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="soundcloud.css">
+		<script src="//connect.soundcloud.com/sdk.js"></script>
+		<script src="soundcloud.js"></script>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+	</head>
+	<body id="body">
+		<span id="menu">Menu</span>
+		<div id="overlay" class="overlay">
+			<div class="contain">
+				<ul class="buttons">
+					<li id="now">Now Playing</li>
+					<li id="songs">Songs</li>
+					<li id="search">Search</li>
+				</ul>
+				<div class="listing">
+					<div id="now_box" class="now">
+						<ul id="now_ul"></ul>
+					</div>
+					<div id="songs_box" class="songs">
+						<ul id="songs_ul">
+							<li>Log in</li>
+						</ul>
+					</div>
+					<div id="search_box" class="search">
+						<span>
+							<input type="search" placeholder="Search...">
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="progress" class="progress"></div>
+		<div class="player">
+			<button id="play">Play</button>
+		</div>
+	</body>
+</html>
