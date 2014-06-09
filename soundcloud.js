@@ -70,9 +70,19 @@ function now_playing(){
 	}
 }
 
+function userload(){
+	SC.connect(function(){
+		SC.get('/me/playlists', function(playlist){
+			console.log(playlist);
+		});
+	});
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
+	var signin = false;
 	document.getElementById('menu').addEventListener('click', function(){
+		if (!signin) {userload(); signin = true;}
 		if (!menu){
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
