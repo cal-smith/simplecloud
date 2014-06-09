@@ -70,10 +70,23 @@ function now_playing(){
 	}
 }
 
+function loadplaylist(id){
+	SC.get('/playlist/'+id, function(playlist){
+		for (var i = 0; i < playlist.tracks.length; i++) {
+			tracks.push(playlist.tracks[i].permalink_url)
+		}
+		now_playing();
+	});
+}
+
 function userload(){
 	SC.connect(function(){
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
+			for (var i = 0; i < playlist.length; i++) {
+				var li = '<li onclick="loadplaylist('+playlist[i].id+')"><span>' + playlist[i].title + '</span><span>(' + playlist[i].tracks.length + 'songs)</span></li>'
+			};
+			document.getElementById('songs_ul').insertAdjacentHTML('beforeend', li);
 		});
 	});
 }
