@@ -68,7 +68,8 @@ function progress(sound){
 function now_playing(){
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
-			var li = '<li onclick=playback(true, "' + track.permalink_url + '")><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
+			var permalink = '"'+track.permalink_url+'"';
+			var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
 			document.getElementById('now_ul').insertAdjacentHTML('beforeend', li);
 		});
 	}
