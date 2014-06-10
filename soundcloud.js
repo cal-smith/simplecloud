@@ -29,6 +29,7 @@ function playback(next_song, track){
 
 			function start_playback(){
 				if (!playing || next_song){
+					if (next_song) { sound.destruct(); }
 					sound.play({
 						whileplaying: function(){
 							progress(this);
