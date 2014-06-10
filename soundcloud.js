@@ -3,13 +3,21 @@ SC.initialize({
 	redirect_uri: "http://test.reallyawesomedomain.com/callback.html",
 });
 var tracks = [];
+var trackindex = 0;
 
-tracks.push("https://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
-function playback(next_song){
-	SC.get('/resolve', { url: tracks[0] }, function(track) {
+tracks.push("http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
+tracks.push("http://soundcloud.com/theglitchmob/whitestripesremix");
+
+function playback(next_song, track){
+	if (track) {
+		trackindex = tracks.indexOf(track);
+		if (trackindex === -1) {
+			console.log("array doesnt contain. likely malformed url");
+		};
+	}
+	SC.get('/resolve', { url: tracks[trackindex] }, function(track) {
 		console.log(track);
 		SC.stream(track.id, function(sound) {
-			var playing = false;
 			var button = document.getElementById('play');
 			var image;
 			if (track.artwork_url != null){
@@ -19,37 +27,36 @@ function playback(next_song){
 			}
 			image = image.replace('large', 'original');
 			document.body.style.backgroundImage = 'url('+image+')';
-			
-			button.addEventListener('click', function(){ start_playback();});
 
-			if (next_song) start_playback();
-
-			function start_playback(){
-				if (!playing || next_song){
-					sound.play({
-						whileplaying: function(){
-							progress(this);
-						},
-						onfinish: function(){
-							if (tracks.length != 1){
-								tracks.shift();
-								playback(true);
-								sound.destruct();
-							} else{
-								button.innerText = "Play";
-								playing = false;
-							}
-						}
-					});
-					button.innerText = "Pause";
-					next_song = false;
-					playing = true;
-				} else{
-					sound.pause();
+			var smopts = {
+				whileplaying: function(){
+					progress(this);
+				},
+				onfinish: function(){
+					if (trackindex !== tracks.length - 1){
+						trackindex++;
+						playback(true);
+						//sound.destruct();
+					} else{
+						button.innerText = "Play";
+					}
+				},
+				onpause: function(){
 					button.innerText = "Play";
-					playing = false;
+				},
+				onplay: function(){
+					button.innerText = "Pause";
 				}
 			}
+
+			if(next_song){
+				soundManager.destroySound(soundManager.soundIDs[0]);
+				sound.play(smopts);
+			}
+
+			sound.load(smopts);
+
+			button.addEventListener('click', function(){ sound.togglePause(); });
 		});
 	});
 }
@@ -64,15 +71,40 @@ function progress(sound){
 function now_playing(){
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
-			var li = '<li><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
+			var permalink = "'"+track.permalink_url+"'";
+			var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
 			document.getElementById('now_ul').insertAdjacentHTML('beforeend', li);
 		});
 	}
 }
 
+function loadplaylist(id){
+	SC.get('/playlists/'+id, function(playlist){
+		console.log(playlist);
+		for (var i = 0; i < playlist.tracks.length; i++) {
+			tracks.push(playlist.tracks[i].permalink_url)
+		}
+		now_playing();
+	});
+}
+
+function userload(){
+	SC.connect(function(){
+		SC.get('/me/playlists', function(playlist){
+			console.log(playlist);
+			for (var i = 0; i < playlist.length; i++) {
+				var li = '<li onclick="loadplaylist('+playlist[i].id+')"><span>' + playlist[i].title + '</span><span> (' + playlist[i].tracks.length + 'songs)</span></li>'
+			};
+			document.getElementById('songs_ul').insertAdjacentHTML('beforeend', li);
+		});
+	});
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
+	var signin = false;
 	document.getElementById('menu').addEventListener('click', function(){
+		if (!signin) {userload(); signin = true;}
 		if (!menu){
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
@@ -94,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.getElementById('search_box').style.display ="none";
 		document.getElementById(tab).style.display = "block";
 	}
+
 	now_playing();
 	playback();
 });
