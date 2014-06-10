@@ -4,15 +4,20 @@ SC.initialize({
 });
 var tracks = [];
 var trackindex = 0;
-tracks.push("https://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
+
+tracks.push("http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
+tracks.push("http://soundcloud.com/theglitchmob/whitestripesremix");
+
 function playback(next_song, track){
 	if (track) {
-		trackindex = tracks.indexOf(track)
+		trackindex = tracks.indexOf(track);
+		if (trackindex === -1) {
+			console.log("array doesnt contain. likely malformed url");
+		};
 	}
 	SC.get('/resolve', { url: tracks[trackindex] }, function(track) {
 		console.log(track);
 		SC.stream(track.id, function(sound) {
-			var playing = false;
 			var button = document.getElementById('play');
 			var image;
 			if (track.artwork_url != null){
@@ -22,38 +27,36 @@ function playback(next_song, track){
 			}
 			image = image.replace('large', 'original');
 			document.body.style.backgroundImage = 'url('+image+')';
-			
-			button.addEventListener('click', function(){ start_playback();});
 
-			if (next_song) start_playback();
-
-			function start_playback(){
-				if (!playing || next_song){
-					if (next_song) { sound.destruct(); }
-					sound.play({
-						whileplaying: function(){
-							progress(this);
-						},
-						onfinish: function(){
-							if (trackindex !== tracks.length - 1){
-								trackindex++;
-								playback(true);
-								sound.destruct();
-							} else{
-								button.innerText = "Play";
-								playing = false;
-							}
-						}
-					});
-					button.innerText = "Pause";
-					next_song = false;
-					playing = true;
-				} else{
-					sound.pause();
+			var smopts = {
+				whileplaying: function(){
+					progress(this);
+				},
+				onfinish: function(){
+					if (trackindex !== tracks.length - 1){
+						trackindex++;
+						playback(true);
+						//sound.destruct();
+					} else{
+						button.innerText = "Play";
+					}
+				},
+				onpause: function(){
 					button.innerText = "Play";
-					playing = false;
+				},
+				onplay: function(){
+					button.innerText = "Pause";
 				}
 			}
+
+			if(next_song){
+				soundManager.destroySound(soundManager.soundIDs[0]);
+				sound.play(smopts);
+			}
+
+			sound.load(smopts);
+
+			button.addEventListener('click', function(){ sound.togglePause(); });
 		});
 	});
 }
