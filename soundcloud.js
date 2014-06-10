@@ -3,14 +3,13 @@ SC.initialize({
 	redirect_uri: "http://test.reallyawesomedomain.com/callback.html",
 });
 var tracks = [];
-
+var trackindex = 0;
 tracks.push("https://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
 function playback(next_song, track){
-	var i;
-	if (typeof track === "undefined") {
-		i = 0;
+	if (track) {
+		trackindex = tracks.indexOf(track)
 	}
-	SC.get('/resolve', { url: tracks[0] }, function(track) {
+	SC.get('/resolve', { url: tracks[trackindex] }, function(track) {
 		console.log(track);
 		SC.stream(track.id, function(sound) {
 			var playing = false;
@@ -35,8 +34,8 @@ function playback(next_song, track){
 							progress(this);
 						},
 						onfinish: function(){
-							if (tracks.length != 1){
-								tracks.shift();
+							if (trackindex !== tracks.length - 1){
+								trackindex++;
 								playback(true);
 								sound.destruct();
 							} else{
@@ -68,7 +67,7 @@ function progress(sound){
 function now_playing(){
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
-			var li = '<li><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
+			var li = '<li onclick="'+ playback(true, track.permalink_url) +'"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
 			document.getElementById('now_ul').insertAdjacentHTML('beforeend', li);
 		});
 	}
@@ -122,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.getElementById('search_box').style.display ="none";
 		document.getElementById(tab).style.display = "block";
 	}
+
 	now_playing();
 	playback();
 });
