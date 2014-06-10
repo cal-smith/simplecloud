@@ -103,8 +103,9 @@ button:active{
 }
 
 .listing{
-	overflow: visible;
+	overflow: auto;
 	text-align: left;
+	height: calc(100% - 65px);
 }
 
 .listing input[type=search]{
@@ -114,6 +115,16 @@ button:active{
 .listing ul{
 	padding-left: 0;
 	list-style: none;
+}
+
+.listing li:first-child{
+	border-top: 1px solid #C9C9C9;
+}
+
+.listing li{
+	padding-bottom: 5px;
+	padding-top: 5px;
+	border-bottom: 1px solid #C9C9C9;
 }
 
 .now{
