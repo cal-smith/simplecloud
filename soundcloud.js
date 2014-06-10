@@ -5,7 +5,11 @@ SC.initialize({
 var tracks = [];
 
 tracks.push("https://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
-function playback(next_song){
+function playback(next_song, track){
+	var i;
+	if (typeof track === "undefined") {
+		i = 0;
+	}
 	SC.get('/resolve', { url: tracks[0] }, function(track) {
 		console.log(track);
 		SC.stream(track.id, function(sound) {
