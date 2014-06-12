@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	now_playing();
 	playback();
 });
-
+//sometimes songs get duplicated for no reason. 
 //volume adjust D:
 //<back goes to start of song, then back one when clicked again
 // forward> goes to next song
@@ -141,3 +141,4 @@ songs: list of user playlists and artist following -> songs: (song title(artist)
 search: uses soundcloud search -> results (song title(artist) // add)
 (add songs from user stuff + sortablelist of songs)
 */
+//add attribution in accordance with soundcloud's rules

@@ -5,9 +5,19 @@ html{
 }
 
 body{
+	-webkit-background-size: cover;
 	background-size: cover;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
 	align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
 	justify-content: center;
 	margin: 0;
 	font-family: 'Lato', sans-serif;
@@ -25,6 +35,7 @@ body{
 	cursor: pointer;
 	z-index: 4;
 	color: #000;
+	-webkit-transition: color 1s ease;
 	transition: color 1s ease;
 	border: 1px solid #fff;
 	padding: 5px;
@@ -39,6 +50,7 @@ body{
 	width: 0%;
 	z-index: 1;
 	opacity: 0.5;
+	-webkit-transition: all 1s ease;
 	transition: all 1s ease;
 }
 
@@ -56,7 +68,9 @@ button{
 }
 
 button:active{
+	-webkit-transition: -webkit-box-shadow 0.2s;
 	transition: box-shadow 0.2s;
+	-webkit-box-shadow: inset 1px 0px 5px 2px #000;
 	box-shadow: inset 1px 0px 5px 2px #000;
 }
 
@@ -68,10 +82,19 @@ button:active{
 	background: rgba(0, 0, 0, 0.69);;
 	width: 100%;
 	height: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-align-content: center;
+	-ms-flex-line-pack: center;
 	align-content: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
 	justify-content: center;
 	top: -100%;
+	-webkit-transition: top 1s ease;
 	transition: top 1s ease;
 }
 
@@ -105,6 +128,7 @@ button:active{
 .listing{
 	overflow: auto;
 	text-align: left;
+	height: -webkit-calc(100% - 65px);
 	height: calc(100% - 65px);
 }
 
