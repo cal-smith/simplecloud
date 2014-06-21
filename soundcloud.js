@@ -78,8 +78,11 @@ function now_playing(){//generates the new playing list
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
 			var permalink = "'"+track.permalink_url+"'";
-			var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
-			now_frag.insertAdjacentHTML('beforeend', li);
+			//var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
+			var li = document.createElement("li");
+			li.onclick = "playback(true, " + permalink + ")";
+			li.innerHTML = "<span>" + track.title + "</span> // <span>" + track.user.username + "</span>";
+			now_frag.appendChild(li);
 		});
 	}
 	document.getElementById('now_ul').appendChild(now_frag);
