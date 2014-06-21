@@ -163,16 +163,16 @@ button:active{
 	border-bottom: 1px solid #C9C9C9;
 }
 
+.listing li:hover{
+	background: #1E90FF;
+}
+
 .now{
 	display: block;
 }
 
 .songs{
 	display: none;
-}
-
-.songs_ul li:hover{
-	background: #1E90FF;
 }
 
 .search{
