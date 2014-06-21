@@ -40,6 +40,7 @@ body{
 	z-index: 1;
 	opacity: 0.5;
 	transition: all 1s ease;
+	top: 0;
 }
 
 .player{
@@ -75,6 +76,15 @@ button:active{
 	transition: top 1s ease;
 }
 
+.loading{
+	font-size: 5em;
+	position: fixed;
+	bottom: 150px;
+	width: 100%;
+	left: 0;
+	text-align: center;
+}
+
 .contain{
 	text-align: center;
 }
@@ -92,6 +102,8 @@ button:active{
 	border-right: 1px solid #fff;
 	padding: 5px;
 	cursor: pointer;
+	min-width: 480px;
+	float: left;
 }
 
 .buttons li:last-child{
@@ -122,6 +134,10 @@ button:active{
 
 .songs{
 	display: none;
+}
+
+.songs_ul li:hover{
+	background: #1E90FF;
 }
 
 .search{
