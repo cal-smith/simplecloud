@@ -79,12 +79,14 @@ function now_playing(){
 }
 
 function loadplaylist(id){
+	loading(true);
 	SC.get('/playlists/'+id, function(playlist){
 		console.log(playlist);
 		for (var i = 0; i < playlist.tracks.length; i++) {
 			tracks.push(playlist.tracks[i].permalink_url)
 		}
 		now_playing();
+		loading(false);
 	});
 }
 
@@ -98,6 +100,16 @@ function userload(){
 			document.getElementById('songs_ul').insertAdjacentHTML('beforeend', li);
 		});
 	});
+}
+
+function loading(state){
+	if (state) document.getElementById('loading').innerText = "Loading...";
+	if (!state) {
+		document.getElementById('loading').innerText = "Loaded!";
+		window.setTimeout(function(){
+			document.getElementById('loading').innerText = "";
+		}, 2000);
+	}
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
