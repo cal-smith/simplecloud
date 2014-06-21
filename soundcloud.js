@@ -74,13 +74,15 @@ function progress(sound){//calculates progress in the song as a %
 
 function now_playing(){//generates the new playing list
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
+	var now_frag = document.createDocumentFragment();
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
 			var permalink = "'"+track.permalink_url+"'";
 			var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
-			document.getElementById('now_ul').insertAdjacentHTML('beforeend', li);
+			now_frag.insertAdjacentHTML('beforeend', li);
 		});
 	}
+	document.getElementById('now_ul').appendChild(now_frag);
 }
 
 function loadplaylist(id){//puts the contents of playlists into the tracks array, and uses now_playing to recreate the now playing list
