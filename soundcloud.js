@@ -10,7 +10,7 @@ tracks.push("http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
 tracks.push("http://soundcloud.com/theglitchmob/whitestripesremix");
 
 function playback(next_song, track){
-	if (track) {
+	if (track) {//sets trackindex to the selected track. lets us start playing from any arbitrary point in the now playing list.
 		trackindex = tracks.indexOf(track);
 		if (trackindex === -1) {
 			console.log("array doesnt contain. likely malformed url");
@@ -31,7 +31,7 @@ function playback(next_song, track){
 			image = image.replace('large', 'original');
 			document.body.style.backgroundImage = 'url('+image+')';
 
-			var smopts = {
+			var smopts = {//common sound manager options. lets us set various event handlers no matter now we create the sound object
 				whileplaying: function(){
 					progress(this);
 				},
@@ -39,7 +39,6 @@ function playback(next_song, track){
 					if (trackindex !== tracks.length - 1){
 						trackindex++;
 						playback(true);
-						//sound.destruct();
 					} else{
 						button.textContent = "Play";
 					}
@@ -54,7 +53,7 @@ function playback(next_song, track){
 				}
 			}
 
-			if(next_song){
+			if(next_song){//destroys the old sound object, then plays the new object.
 				soundManager.destroySound(soundManager.soundIDs[0]);
 				sound.play(smopts);
 			}
@@ -67,13 +66,14 @@ function playback(next_song, track){
 }
 
 
-function progress(sound){
+function progress(sound){//calculates progress in the song as a %
 	var duration = sound.durationEstimate;
 	var position = sound.position;
 	document.getElementById('progress').style.width = position / duration * 100 + '%';
 }
 
-function now_playing(){
+function now_playing(){//generates the new playing list
+	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	for (var i = 0; i < tracks.length; i++) {
 		SC.get('/resolve', { url: tracks[i] }, function(track) {
 			var permalink = "'"+track.permalink_url+"'";
@@ -83,7 +83,8 @@ function now_playing(){
 	}
 }
 
-function loadplaylist(id){
+function loadplaylist(id){//puts the contents of playlists into the tracks array, and uses now_playing to recreate the now playing list
+						//(currently recreates the whole list, might need to swap to simpler partial recreation[ie. append new entrys])
 	loading(true);
 	SC.get('/playlists/'+id, function(playlist){
 		console.log(playlist);
@@ -95,7 +96,7 @@ function loadplaylist(id){
 	});
 }
 
-function userload(){
+function userload(){//connects a user, and loads their playlists
 	SC.connect(function(){
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
@@ -107,7 +108,7 @@ function userload(){
 	});
 }
 
-function loading(state){
+function loading(state){//loading "notification"
 	if (state) {
 		document.getElementById('loading').textContent = "Loading...";
 		document.getElementById('loading').style.display ="block";
@@ -122,7 +123,7 @@ function loading(state){
 document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
 	var signin = false;
-	document.getElementById('menu').addEventListener('click', function(){
+	document.getElementById('menu').addEventListener('click', function(){//event handler for menu clicks
 		if (!signin) {userload(); signin = true;}
 		if (!menu){
 			menu = true;
