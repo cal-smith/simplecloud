@@ -2,6 +2,7 @@ SC.initialize({
 	client_id: "f7c4666dc24c5902042fef97122e2f41",
 	redirect_uri: "http://test.reallyawesomedomain.com/callback.html",
 });
+
 var tracks = [];
 var trackindex = 0;
 
@@ -16,8 +17,10 @@ function playback(next_song, track){
 		};
 	}
 	SC.get('/resolve', { url: tracks[trackindex] }, function(track) {
+		loading(true);
 		console.log(track);
 		SC.stream(track.id, function(sound) {
+			loading(false);
 			var button = document.getElementById('play');
 			var image;
 			if (track.artwork_url != null){
@@ -38,14 +41,14 @@ function playback(next_song, track){
 						playback(true);
 						//sound.destruct();
 					} else{
-						button.innerText = "Play";
+						button.textContent = "Play";
 					}
 				},
 				onpause: function(){
-					button.innerText = "Play";
+					button.textContent = "Play";
 				},
 				onplay: function(){
-					button.innerText = "Pause";
+					button.textContent = "Pause";
 				}
 			}
 
@@ -103,11 +106,13 @@ function userload(){
 }
 
 function loading(state){
-	if (state) document.getElementById('loading').innerText = "Loading...";
-	if (!state) {
-		document.getElementById('loading').innerText = "Loaded!";
+	if (state) {
+		document.getElementById('loading').textContent = "Loading...";
+		document.getElementById('loading').style.display ="block";
+	} else if (!state) {
+		document.getElementById('loading').textContent = "Loaded!";
 		window.setTimeout(function(){
-			document.getElementById('loading').innerText = "";
+			document.getElementById('loading').style.display ="none";
 		}, 2000);
 	}
 }
