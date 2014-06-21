@@ -46,9 +46,11 @@ function playback(next_song, track){
 				},
 				onpause: function(){
 					button.textContent = "Play";
+					document.getElementsByTagName('title')[0].textContent = "[=] // SimpleCloud";
 				},
 				onplay: function(){
 					button.textContent = "Pause";
+					document.getElementsByTagName('title')[0].textContent = "[>] // SimpleCloud";
 				}
 			}
 
