@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 	metadata();
 	document.getElementById('play').addEventListener('click', function(){
-		//userload();
+		userload();
 		document.getElementById('play').textContent = "Play";
 		playback();
 	});
