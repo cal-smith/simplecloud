@@ -100,7 +100,7 @@ function append_now(){
 		var permalink = "'"+tracks[i].url+"'";
 		var li = document.createElement("li");
 		var text = tracks[i].title + ' /\/ ' + tracks[i].user;
-		li.attributes.onclick = 'playback(true, ' + permalink + ')';
+		li.setAttribute('onclick', 'playback(true, ' + permalink + ')');
 		li.textContent = text;
 		now_frag.appendChild(li);
 	}
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 	metadata();
 	document.getElementById('play').addEventListener('click', function(){
-		//userload();
+		userload();
 		document.getElementById('play').textContent = "Play";
 		playback();
 	});
