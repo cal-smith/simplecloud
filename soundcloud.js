@@ -6,62 +6,62 @@ SC.initialize({
 var tracks = [];
 var trackindex = 0;
 
-tracks.push("http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know");
-tracks.push("http://soundcloud.com/theglitchmob/whitestripesremix");
+tracks.push({"url":"http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know"});
+tracks.push({"url":"http://soundcloud.com/theglitchmob/whitestripesremix"});
 
 function playback(next_song, track){
 	if (track) {//sets trackindex to the selected track. lets us start playing from any arbitrary point in the now playing list.
-		trackindex = tracks.indexOf(track);
+		trackindex = tracks.map(function(x){
+			return x.url
+		}).indexOf(track);
 		if (trackindex === -1) {
 			console.log("array doesnt contain. likely malformed url");
 		};
 	}
-	SC.get('/resolve', { url: tracks[trackindex] }, function(track) {
+	SC.stream(tracks[trackindex].id, function(sound) {
 		loading(true);
-		console.log(track);
-		SC.stream(track.id, function(sound) {
-			loading(false);
-			var button = document.getElementById('play');
-			var image;
-			if (track.artwork_url != null){
-				image = track.artwork_url;
-			} else {
-				image = track.user.avatar_url;
-			}
-			image = image.replace('large', 'original');
-			document.body.style.backgroundImage = 'url('+image+')';
-
-			var smopts = {//common sound manager options. lets us set various event handlers no matter now we create the sound object
-				whileplaying: function(){
-					progress(this);
-				},
-				onfinish: function(){
-					if (trackindex !== tracks.length - 1){
-						trackindex++;
-						playback(true);
-					} else{
-						button.textContent = "Play";
-					}
-				},
-				onpause: function(){
+		console.log(tracks[trackindex]);
+		track = tracks[trackindex];
+		var button = document.getElementById('play');
+		var image;
+		if (track.art != null){
+			image = track.art;
+		} else {
+			image = track.avatar;
+		}
+		image = image.replace('large', 'original');
+		document.body.style.backgroundImage = 'url('+image+')';
+		loading(false);
+		var smopts = {//common sound manager options. lets us set various event handlers no matter now we create the sound object
+			whileplaying: function(){
+				progress(this);
+			},
+			onfinish: function(){
+				if (trackindex !== tracks.length - 1){
+					trackindex++;
+					playback(true);
+				} else{
 					button.textContent = "Play";
-					document.getElementsByTagName('title')[0].textContent = "[=] // SimpleCloud";
-				},
-				onplay: function(){
-					button.textContent = "Pause";
-					document.getElementsByTagName('title')[0].textContent = "[>] // SimpleCloud";
 				}
+			},
+			onpause: function(){
+				button.textContent = "Play";
+				document.getElementsByTagName('title')[0].textContent = "[=] // SimpleCloud";
+			},
+			onplay: function(){
+				button.textContent = "Pause";
+				document.getElementsByTagName('title')[0].textContent = "[>] // SimpleCloud";
 			}
+		}
 
-			if(next_song){//destroys the old sound object, then plays the new object.
-				soundManager.destroySound(soundManager.soundIDs[0]);
-				sound.play(smopts);
-			}
+		if(next_song){//destroys the old sound object, then plays the new object.
+			soundManager.destroySound(soundManager.soundIDs[0]);
+			sound.play(smopts);
+		}
 
-			sound.load(smopts);
+		sound.load(smopts);
 
-			button.addEventListener('click', function(){ sound.togglePause(); });
-		});
+		button.addEventListener('click', function(){ sound.togglePause(); });
 	});
 }
 
@@ -72,20 +72,39 @@ function progress(sound){//calculates progress in the song as a %
 	document.getElementById('progress').style.width = position / duration * 100 + '%';
 }
 
-function now_playing(){//generates the new playing list
+function metadata(onload){//populates metadata
+	var count = 0;
+	for (var i = 0; i < tracks.length; i++) {
+		SC.get('/resolve', { url: tracks[i].url }, function(track) {//async. everything was returning out of order because of this. somehow get the data from soundcloud, but keep it in the correct order
+			count++;
+			index = tracks.map(function(x){
+				return x.url;
+			}).indexOf(track.permalink_url);
+			tracks[index].title = track.title;
+			tracks[index].user = track.user.username;
+			tracks[index].id = track.id;
+			tracks[index].art = track.artwork_url;
+			tracks[index].avatar = track.user.avatar_url;
+			if (count == tracks.length){
+				console.log(index, count, "loaded metadata");
+			}
+		});
+	}
+}
+
+function append_now(){
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	var now_frag = document.createDocumentFragment();
 	for (var i = 0; i < tracks.length; i++) {
-		SC.get('/resolve', { url: tracks[i] }, function(track) {
-			var permalink = "'"+track.permalink_url+"'";
-			//var li = '<li onclick="playback(true, ' + permalink + ')"><span>' + track.title + '</span> // <span>' + track.user.username + '</span></li>';
-			var li = document.createElement("li");
-			li.onclick = "playback(true, " + permalink + ")";
-			li.innerHTML = "<span>" + track.title + "</span> // <span>" + track.user.username + "</span>";
-			now_frag.appendChild(li);
-		});
+		tracks[i]
+		var permalink = "'"+tracks[i].url+"'";
+		var li = document.createElement("li");
+		var text = tracks[i].title + ' /\/ ' + tracks[i].user;
+		li.attributes.onclick = 'playback(true, ' + permalink + ')';
+		li.textContent = text;
+		now_frag.appendChild(li);
 	}
-	document.getElementById('now_ul').appendChild(now_frag);
+	document.getElementById('now_ul').appendChild(now_frag.cloneNode(true));
 }
 
 function loadplaylist(id){//puts the contents of playlists into the tracks array, and uses now_playing to recreate the now playing list
@@ -96,12 +115,13 @@ function loadplaylist(id){//puts the contents of playlists into the tracks array
 		for (var i = 0; i < playlist.tracks.length; i++) {
 			tracks.push(playlist.tracks[i].permalink_url)
 		}
-		now_playing();
+		metadata();//regenerate metadata
 		loading(false);
 	});
 }
 
 function userload(){//connects a user, and loads their playlists
+	append_now();//generate now playing the first time we open the menu
 	SC.connect(function(){
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
@@ -121,7 +141,7 @@ function loading(state){//loading "notification"
 		document.getElementById('loading').textContent = "Loaded!";
 		window.setTimeout(function(){
 			document.getElementById('loading').style.display ="none";
-		}, 2000);
+		}, 1000);
 	}
 }
 
@@ -151,9 +171,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.getElementById('search_box').style.display ="none";
 		document.getElementById(tab).style.display = "block";
 	}
-
-	now_playing();
-	playback();
+	metadata();
+	document.getElementById('play').addEventListener('click', function(){
+		//userload();
+		document.getElementById('play').textContent = "Play";
+		playback();
+	});
 });
 //sometimes songs get duplicated for no reason. 
 //volume adjust D:
@@ -167,3 +190,46 @@ search: uses soundcloud search -> results (song title(artist) // add)
 (add songs from user stuff + sortablelist of songs)
 */
 //add attribution in accordance with soundcloud's rules
+//object.watch polyfill
+// object.watch
+if (!Object.prototype.watch) {
+	Object.defineProperty(Object.prototype, "watch", {
+		enumerable: false,
+		configurable: true,
+		writable: false,
+		value: function (prop, handler) {
+			var
+			oldval = this[prop],
+			newval = oldval,
+			getter = function () {
+				return newval;
+			},
+			setter = function (val) {
+				oldval = newval;
+				return newval = handler.call(this, prop, oldval, val);
+			};
+			if (delete this[prop]) { // can't watch constants
+				Object.defineProperty(this, prop, {
+					get: getter,
+					set: setter,
+					enumerable: true,
+					configurable: true
+				});
+			}
+		}
+	});
+}
+ 
+// object.unwatch
+if (!Object.prototype.unwatch) {
+	Object.defineProperty(Object.prototype, "unwatch", {
+		enumerable: false,
+		configurable: true,
+		writable: false,
+		value: function (prop) {
+			var val = this[prop];
+			delete this[prop]; // remove accessors
+			this[prop] = val;
+		}
+	});
+}
