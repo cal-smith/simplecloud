@@ -92,7 +92,7 @@ function metadata(onload){//populates metadata
 	}
 }
 
-function append_now(){
+function append_now(){//only re-draw the now playing list when there things to add
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	var now_frag = document.createDocumentFragment();
 	for (var i = 0; i < tracks.length; i++) {
@@ -154,9 +154,7 @@ function loading(state){//loading "notification"
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
-	var signin = false;
 	document.getElementById('menu').addEventListener('click', function(){//event handler for menu clicks
-		if (!signin) {userload(); signin = true;}
 		if (!menu){
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
