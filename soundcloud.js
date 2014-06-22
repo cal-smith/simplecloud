@@ -179,11 +179,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.getElementById(tab).style.display = "block";
 	}
 	metadata();
-	document.getElementById('play').addEventListener('click', function(){
+	function load_listen(){
 		userload();
 		document.getElementById('play').textContent = "Play";
 		playback();
-	});
+		document.getElementById('play').removeEventListener('click', load_listen);
+	}
+	document.getElementById('play').addEventListener('click', load_listen);
 });
 //sometimes songs get duplicated for no reason. 
 //volume adjust D:
