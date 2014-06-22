@@ -108,12 +108,12 @@ function append_now(){
 }
 
 function loadplaylist(id){//puts the contents of playlists into the tracks array, and uses now_playing to recreate the now playing list
-						//(currently recreates the whole list, might need to swap to simpler partial recreation[ie. append new entrys])
+						//(currently recreates the whole list, might need to swap to simpler partial recreation[ie. append only new entrys])
 	loading(true);
 	SC.get('/playlists/'+id, function(playlist){
 		console.log(playlist);
 		for (var i = 0; i < playlist.tracks.length; i++) {
-			tracks.push(playlist.tracks[i].permalink_url)
+			tracks.push({"url":playlist.tracks[i].permalink_url});
 		}
 		metadata();//regenerate metadata
 		loading(false);
