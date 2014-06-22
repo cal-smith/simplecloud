@@ -122,7 +122,14 @@ function loadplaylist(id){//puts the contents of playlists into the tracks array
 
 function userload(){//connects a user, and loads their playlists
 	append_now();//generate now playing the first time we open the menu
-	SC.connect(function(){
+	if (SC.isConnected()) {
+		connect();
+	} else{
+		SC.connect(function(){
+			connect();
+		});
+	}
+	function connect(){
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
 			for (var i = 0; i < playlist.length; i++) {
@@ -130,7 +137,7 @@ function userload(){//connects a user, and loads their playlists
 			};
 			document.getElementById('songs_ul').insertAdjacentHTML('beforeend', li);
 		});
-	});
+	}
 }
 
 function loading(state){//loading "notification"
