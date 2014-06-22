@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	});
 
-	document.getElementById('now').addEventListener('click', function(){switchtab('now_box');});
+	document.getElementById('now').addEventListener('click', function(){switchtab('now_box'); append_now();});
 	document.getElementById('songs').addEventListener('click', function(){switchtab('songs_box');});
 	document.getElementById('search').addEventListener('click', function(){switchtab('search_box');});
 	
