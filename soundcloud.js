@@ -174,7 +174,7 @@ function load_listen(){
 		SC.connect(function(){});
 	}
 	elm('play').textContent = "Play";
-	playback();
+	//load and play favorites?
 	elm('play').removeEventListener('click', load_listen);
 }
 
