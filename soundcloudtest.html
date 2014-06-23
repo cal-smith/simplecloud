@@ -2,7 +2,6 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="soundcloud.css">
 		<script src="//connect.soundcloud.com/sdk.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 		<script src="soundcloud.js"></script>
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title>SimpleCloud</title>
@@ -17,9 +16,8 @@
 					<li id="songs">Playlists</li>
 					<li id="search">Search</li>
 				</ul>
-				<div class="listing" ng-controller="listing">
+				<div class="listing">
 					<div id="now_box" class="now">
-						<!--<ul ng-repeat="track in tracks" id="now_ul">{{track.url}}{{track.title}}</ul>-->
 						<ul id="now_ul"></ul>
 					</div>
 					<div id="songs_box" class="songs">
