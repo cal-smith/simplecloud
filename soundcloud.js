@@ -139,6 +139,8 @@ function userload(menu){//connects a user, and loads their playlists
 			connect();
 			try{
 				playback();
+			} catch (e){
+				console.log(e);
 			}
 		});
 	}
