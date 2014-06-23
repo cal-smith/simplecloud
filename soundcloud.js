@@ -22,6 +22,10 @@ function playback(next_song, track){
 		loading(true);
 		console.log(tracks[trackindex]);
 		track = tracks[trackindex];
+		elm("title").textContent = track.title;
+		elm("user").textContent = track.user;
+		elm("artist_link").href = track.url;
+		elm("artist_link2").href = track.url;
 		var button = document.getElementById('play');
 		var image;
 		if (track.art != null){
@@ -129,7 +133,7 @@ function userload(){//connects a user, and loads their playlists
 			connect();
 		});
 	}
-	function connect(){
+	function connect(){//get playlists, artists user is following, and favorited songs
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
 			for (var i = 0; i < playlist.length; i++) {
@@ -152,10 +156,15 @@ function loading(state){//loading "notification"
 	}
 }
 
+function elm(e){
+	return document.getElementById(e);
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
 	document.getElementById('menu').addEventListener('click', function(){//event handler for menu clicks
 		if (!menu){
+			userload();
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
 			document.getElementById('menu').style.color ="#fff";
@@ -191,52 +200,50 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // forward> goes to next song
 //add soundcloud sign in
 /*add song selection screen with ios7 like tabs (now playing|songs|search)
-now playing: sortable list of songs (sort hangle // song title(artist) // delete)
+now playing: sortable list of songs (sort handle // song title(artist) // delete)
 songs: list of user playlists and artist following -> songs: (song title(artist) // add)
+playlist title -> song // artist
+				  song // artist
+				  song // artist
+				  song // artist
+playlist title -> song // artist
+				  song // artist
+				  song // artist
+				  song // artist
+
+		  (artist above)
+artist -> playlist title -> song
+                            song
+                            song
+                            song
+                            song
+          playlist title -> song
+                            song
+                            song
+                            song
+          song
+          song
+          song
+          song
+
+		  (artist above)
+artist -> playlist title -> song
+                            song
+                            song
+                            song
+                            song
+          playlist title -> song
+                            song
+                            song
+                            song
+          song
+          song
+          song
+          song
+liked song
+liked song
+liked song
 search: uses soundcloud search -> results (song title(artist) // add)
 (add songs from user stuff + sortablelist of songs)
 */
 //add attribution in accordance with soundcloud's rules
-//object.watch polyfill
-// object.watch
-if (!Object.prototype.watch) {
-	Object.defineProperty(Object.prototype, "watch", {
-		enumerable: false,
-		configurable: true,
-		writable: false,
-		value: function (prop, handler) {
-			var
-			oldval = this[prop],
-			newval = oldval,
-			getter = function () {
-				return newval;
-			},
-			setter = function (val) {
-				oldval = newval;
-				return newval = handler.call(this, prop, oldval, val);
-			};
-			if (delete this[prop]) { // can't watch constants
-				Object.defineProperty(this, prop, {
-					get: getter,
-					set: setter,
-					enumerable: true,
-					configurable: true
-				});
-			}
-		}
-	});
-}
- 
-// object.unwatch
-if (!Object.prototype.unwatch) {
-	Object.defineProperty(Object.prototype, "unwatch", {
-		enumerable: false,
-		configurable: true,
-		writable: false,
-		value: function (prop) {
-			var val = this[prop];
-			delete this[prop]; // remove accessors
-			this[prop] = val;
-		}
-	});
-}
