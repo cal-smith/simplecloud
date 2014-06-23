@@ -62,7 +62,9 @@ function playback(next_song, track){
 		}
 
 		if(next_song){//destroys the old sound object, then plays the new object.
-			soundManager.destroySound(soundManager.soundIDs[0]);
+			if (soundManager.soundIDs.length > 1) {
+				soundManager.destroySound(soundManager.soundIDs[0]);
+			}
 			sound.play(smopts);
 		}
 
@@ -135,12 +137,11 @@ function userload(menu){//connects a user, and loads their playlists
 		connect();
 	} else{
 		SC.connect(function(){
-			load_listen();
 			connect();
+			load_listen();
 		});
 	}
 	function connect(){//get playlists, artists user is following, and favorited songs
-		playback();
 		//load users favorites into now_playing right away. gives something to look at
 		SC.get('/me/favorites', function(fav){
 
