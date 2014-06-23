@@ -141,6 +141,7 @@ function userload(menu){//connects a user, and loads their playlists
 	}
 	function connect(){//get playlists, artists user is following, and favorited songs
 		//load users favorites into now_playing right away. gives something to look at
+		playback();
 		SC.get('/me/favorites', function(fav){
 
 		});
