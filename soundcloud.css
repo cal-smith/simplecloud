@@ -126,7 +126,6 @@ button:active{
 	border-right: 1px solid #fff;
 	padding: 5px;
 	cursor: pointer;
-	min-width: 480px;
 	float: left;
 }
 
@@ -143,6 +142,7 @@ button:active{
 	text-align: left;
 	height: -webkit-calc(100% - 65px);
 	height: calc(100% - 65px);
+	min-width: 480px;
 }
 
 .listing input[type=search]{

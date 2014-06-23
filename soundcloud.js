@@ -86,13 +86,19 @@ function metadata(onload){//populates metadata
 			tracks[index].art = track.artwork_url;
 			tracks[index].avatar = track.user.avatar_url;
 			if (count == tracks.length){
+				append_nowx();
 				console.log(index, count, "loaded metadata");
 			}
 		});
 	}
 }
 
-function append_now(){//only re-draw the now playing list when there things to add
+function listing($scope){
+	//$scope.tracks = tracks;
+}
+
+function append_nowx(){//only re-draw the now playing list when there things to add
+	//have a append_now and metadata on a loop? 
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	var now_frag = document.createDocumentFragment();
 	for (var i = 0; i < tracks.length; i++) {
