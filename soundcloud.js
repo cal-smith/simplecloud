@@ -137,11 +137,6 @@ function userload(menu){//connects a user, and loads their playlists
 		SC.connect(function(){
 			load_listen();
 			connect();
-			try{
-				playback();
-			} catch (e){
-				console.log(e);
-			}
 		});
 	}
 	function connect(){//get playlists, artists user is following, and favorited songs
