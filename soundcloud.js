@@ -127,7 +127,7 @@ function loadplaylist(id){//puts the contents of playlists into the tracks array
 }
 
 function userload(){//connects a user, and loads their playlists
-	append_now();//generate now playing the first time we open the menu
+	//append_now();//generate now playing the first time we open the menu
 	if (SC.isConnected()) {
 		connect();
 	} else{
