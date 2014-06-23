@@ -158,9 +158,12 @@ function loading(state){//loading "notification"
 }
 
 function load_listen(){
-	document.getElementById('play').textContent = "Play";
+	if (!SC.isConnected()) {
+		SC.connect(function(){});
+	}
+	elm('play').textContent = "Play";
 	playback();
-	document.getElementById('play').removeEventListener('click', load_listen);
+	elm('play').removeEventListener('click', load_listen);
 }
 
 function elm(e){
@@ -194,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
 	metadata();
-	document.getElementById('play').addEventListener('click', load_listen);
+	elm('play').addEventListener('click', load_listen);
 });
 //sometimes songs get duplicated for no reason. 
 //volume adjust D:
