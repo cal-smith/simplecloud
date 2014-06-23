@@ -85,8 +85,8 @@ function metadata(onload){//populates metadata
 			tracks[index].id = track.id;
 			tracks[index].art = track.artwork_url;
 			tracks[index].avatar = track.user.avatar_url;
-			if (count == tracks.length){
-				append_nowx();
+			if (count == tracks.length){//when we load all the metadata append the tracks. works well. could work better?
+				append_now();
 				console.log(index, count, "loaded metadata");
 			}
 		});
@@ -97,8 +97,7 @@ function listing($scope){
 	//$scope.tracks = tracks;
 }
 
-function append_nowx(){//only re-draw the now playing list when there things to add
-	//have a append_now and metadata on a loop? 
+function append_now(){//only re-draw the now playing list when there things to add
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	var now_frag = document.createDocumentFragment();
 	for (var i = 0; i < tracks.length; i++) {
@@ -127,7 +126,6 @@ function loadplaylist(id){//puts the contents of playlists into the tracks array
 }
 
 function userload(){//connects a user, and loads their playlists
-	//append_now();//generate now playing the first time we open the menu
 	if (SC.isConnected()) {
 		connect();
 	} else{
@@ -172,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	});
 
-	document.getElementById('now').addEventListener('click', function(){switchtab('now_box'); append_now();});
+	document.getElementById('now').addEventListener('click', function(){switchtab('now_box');});
 	document.getElementById('songs').addEventListener('click', function(){switchtab('songs_box');});
 	document.getElementById('search').addEventListener('click', function(){switchtab('search_box');});
 	
