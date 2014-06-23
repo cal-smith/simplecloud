@@ -137,10 +137,12 @@ function userload(menu){//connects a user, and loads their playlists
 		SC.connect(function(){
 			load_listen();
 			connect();
+			try{
+				playback();
+			}
 		});
 	}
 	function connect(){//get playlists, artists user is following, and favorited songs
-		playback();
 		//load users favorites into now_playing right away. gives something to look at
 		SC.get('/me/favorites', function(fav){
 
