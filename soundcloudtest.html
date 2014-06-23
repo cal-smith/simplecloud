@@ -1,7 +1,8 @@
-<html>
+<html ng-app>
 	<head>
 		<link rel="stylesheet" type="text/css" href="soundcloud.css">
 		<script src="//connect.soundcloud.com/sdk.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 		<script src="soundcloud.js"></script>
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title>SimpleCloud</title>
@@ -13,11 +14,12 @@
 			<div class="contain">
 				<ul class="buttons">
 					<li id="now">Now Playing</li>
-					<li id="songs">Songs</li>
+					<li id="songs">Playlists</li>
 					<li id="search">Search</li>
 				</ul>
-				<div class="listing">
+				<div class="listing" ng-controller="listing">
 					<div id="now_box" class="now">
+						<!--<ul ng-repeat="track in tracks" id="now_ul">{{track.url}}{{track.title}}</ul>-->
 						<ul id="now_ul"></ul>
 					</div>
 					<div id="songs_box" class="songs">
