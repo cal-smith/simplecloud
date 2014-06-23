@@ -125,11 +125,12 @@ function loadplaylist(id){//puts the contents of playlists into the tracks array
 	});
 }
 
-function userload(){//connects a user, and loads their playlists
-	if (SC.isConnected()) {
+function userload(menu){//connects a user, and loads their playlists
+	if (SC.isConnected() && menu) {
 		connect();
 	} else{
 		SC.connect(function(){
+			load_listen();
 			connect();
 		});
 	}
@@ -156,6 +157,12 @@ function loading(state){//loading "notification"
 	}
 }
 
+function load_listen(){
+	document.getElementById('play').textContent = "Play";
+	playback();
+	document.getElementById('play').removeEventListener('click', load_listen);
+}
+
 function elm(e){
 	return document.getElementById(e);
 }
@@ -164,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var menu = false
 	document.getElementById('menu').addEventListener('click', function(){//event handler for menu clicks
 		if (!menu){
-			userload();
+			userload(true);
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
 			document.getElementById('menu').style.color ="#fff";
@@ -185,13 +192,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.getElementById('search_box').style.display ="none";
 		document.getElementById(tab).style.display = "block";
 	}
+
 	metadata();
-	function load_listen(){
-		userload();
-		document.getElementById('play').textContent = "Play";
-		playback();
-		document.getElementById('play').removeEventListener('click', load_listen);
-	}
 	document.getElementById('play').addEventListener('click', load_listen);
 });
 //sometimes songs get duplicated for no reason. 
