@@ -6,8 +6,10 @@ SC.initialize({
 var tracks = [];
 var trackindex = 0;
 
-tracks.push({"url":"http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know"});
-tracks.push({"url":"http://soundcloud.com/theglitchmob/whitestripesremix"});
+if (window.location.hostname == "127.0.0.1") {
+	tracks.push({"url":"http://soundcloud.com/iamwillking/chvrches-do-i-wanna-know"});
+	tracks.push({"url":"http://soundcloud.com/theglitchmob/whitestripesremix"});
+}
 
 function playback(next_song, track){
 	if (track) {//sets trackindex to the selected track. lets us start playing from any arbitrary point in the now playing list.
