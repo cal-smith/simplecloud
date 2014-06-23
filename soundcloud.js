@@ -93,10 +93,6 @@ function metadata(onload){//populates metadata
 	}
 }
 
-function listing($scope){
-	//$scope.tracks = tracks;
-}
-
 function append_now(){//only re-draw the now playing list when there things to add
 	document.getElementById('now_ul').innerHTML = "";//just empty the element for now. should stop any weird mismatches in playlists.
 	var now_frag = document.createDocumentFragment();
