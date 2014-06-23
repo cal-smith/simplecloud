@@ -57,13 +57,16 @@ function playback(next_song, track){
 			onplay: function(){
 				button.textContent = "Pause";
 				document.getElementsByTagName('title')[0].textContent = "[>] // SimpleCloud";
-			}
+			},
+			volume: elm("volume").value
 		}
 
 		if(next_song){//destroys the old sound object, then plays the new object.
 			soundManager.destroySound(soundManager.soundIDs[0]);
 			sound.play(smopts);
 		}
+
+		elm("volume").addEventListener('input', function(){ sound.setVolume(elm("volume").value) });
 
 		sound.load(smopts);
 
@@ -137,6 +140,11 @@ function userload(menu){//connects a user, and loads their playlists
 		});
 	}
 	function connect(){//get playlists, artists user is following, and favorited songs
+		//load users favorites into now_playing right away. gives something to look at
+		SC.get('/me/favorites', function(fav){
+
+		});
+
 		SC.get('/me/playlists', function(playlist){
 			console.log(playlist);
 			for (var i = 0; i < playlist.length; i++) {
@@ -201,8 +209,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	metadata();
 	elm('play').addEventListener('click', load_listen);
 });
-//sometimes songs get duplicated for no reason. 
-//volume adjust D:
+//~~sometimes songs get duplicated for no reason.~~ fixed?
 //<back goes to start of song, then back one when clicked again
 // forward> goes to next song
 //add soundcloud sign in
