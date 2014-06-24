@@ -189,11 +189,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			userload(true);
 			menu = true;
 			document.getElementById('overlay').style.top ="0";
-			document.getElementById('menu').style.color ="#fff";
 		} else {
 			menu = false;
 			document.getElementById('overlay').style.top ="-100%";
-			document.getElementById('menu').style.color ="color: rgb(158, 158, 158);";
 		}
 	});
 
