@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		} else {
 			menu = false;
 			document.getElementById('overlay').style.top ="-100%";
-			document.getElementById('menu').style.color ="#000";
+			document.getElementById('menu').style.color ="color: rgb(158, 158, 158);";
 		}
 	});
 

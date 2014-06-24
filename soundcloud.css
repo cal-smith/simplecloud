@@ -34,11 +34,12 @@ body{
 	left: 5px;
 	cursor: pointer;
 	z-index: 4;
-	color: #000;
+	color: rgb(158, 158, 158);
 	-webkit-transition: color 1s ease;
 	transition: color 1s ease;
 	border: 1px solid #fff;
 	padding: 5px;
+	background: rgba(0, 0, 0, 0.3);
 }
 
 .progress{
